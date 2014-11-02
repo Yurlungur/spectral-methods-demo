@@ -52,3 +52,14 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# LaTeX documentation
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex.gz
+auto/
+
+# Emacs lisp
+*.el
