@@ -59,6 +59,9 @@ target/
 *.blg
 *.out
 *.synctex.gz
+*.nav
+*.snm
+*.toc
 auto/
 
 # Emacs lisp
