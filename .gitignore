@@ -53,6 +53,11 @@ docs/_build/
 # PyBuilder
 target/
 
+# IPython
+#IPython Notebooks
+.ipynb_checkpoints
+.ipynb_checkpoints/*.ipynb
+
 # LaTeX documentation
 *.aux
 *.bbl
