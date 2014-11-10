@@ -1,6 +1,6 @@
 \documentclass[]{beamer}
 \mode<presentation>
-% Time-stamp: <2014-11-03 15:07:29 (jonah)>
+% Time-stamp: <2014-11-10 17:56:39 (jonah)>
 
 % beamer stuff
 % Gives us the bottom line with all the goodies
@@ -116,7 +116,6 @@
 
 \begin{frame}
   \frametitle{The Method of Lines}
-  \pause
   \begin{itemize}
     \item Suppose we want to solve the linear advection equation:
       $$\pd{u}{t} = c \pd{u}{x}$$
@@ -171,11 +170,11 @@
 \begin{frame}
   \frametitle{A Chebyshev Basis}
   \begin{center}
-    \vspace{-0.5cm}
-    \includegraphics[width=11cm]{Chebyshev_Polynomials_of_the_1st_Kind.png}
+    \vspace{-0.3cm}
+    \hspace{-0.6cm}
+    \includegraphics[width=12.5cm,height=8.75cm]{chebyshev_polynomials_jmm.png}
+    %\includegraphics[width=11cm]{Chebyshev_Polynomials_of_the_1st_Kind.png}
   \end{center}
-  \vspace{-0.5cm}
-  Source: Wikipedia
 \end{frame}
 
 
@@ -259,8 +258,29 @@
     $$\frac{u_i^{n+1} - u_{i}^n}{\Delta t} + c \frac{u_{i}^n - u_{i-1}^n}{\Delta x} = 0\ \forall\ i,n\in\Z$$
   \end{block}
   \begin{block}{In Galerkin Methods, Demand:}
-    $$\int_a^b \left(\pd{\tilde{u}}{t} + c \pd{\tilde{u}}{x}\right)\phi_i w dx = 0\ \forall\ i\in\N$$
+    $$\int_a^b \left(\pd{\tilde{u}}{t} + c \pd{\tilde{u}}{x}\right)\phi_i \; w \; dx = 0\ \forall\ i\in\N$$
   \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Measuring Goodness}
+  \begin{columns}
+    \column{6cm}
+    \begin{center}{\Large\underline{Error}}\end{center}
+    \begin{center}
+      $$\epsilon(t,x) = u(t,x) - \tilde{u}(t,x),$$
+      $$\text{ where }L[u] = 0$$
+      $$\text{generically, }\epsilon(x) > 0$$
+    \end{center}
+    \column{6cm}
+    \begin{center}{\Large\underline{Residual}}\end{center}
+    \begin{center}
+      $$R(t,x) = \tilde{L}[\tilde{u}]$$
+      $$\text{often demand that}$$
+      $$\mathcal{R}(t,x) = 0\text{ identically }$$
+    \end{center}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -269,8 +289,10 @@
     \column{6cm}
     \begin{center}{\Large\underline{Error}}\end{center}
     \begin{center}
-      $$\epsilon = \|u-\tilde{u}\|$$
-      $$\text{generically, }\epsilon > 0$$
+      $$\epsilon_i^n = u(t,x)\eval^{t=t^n}_{x=x^i} - u_i^{n+1},$$
+      $$\text{ or }$$
+      $$\epsilon_i^n = \left[\int_a^b\left(u(t,x) - \tilde{u}(t,x)\right)\phi_i dx\right]_{t=t^n}$$
+      $$\text{generically, }\epsilon_i^n > 0$$
     \end{center}
     \column{6cm}
     \begin{center}{\Large\underline{Residual}}\end{center}
@@ -283,6 +305,7 @@
     \end{center}
   \end{columns}
 \end{frame}
+
 
 % \begin{frame}
 %   \frametitle{Recovering A Numerical Scheme (part 1)}
@@ -452,13 +475,26 @@
 % \end{frame}
 
 \begin{frame}
+  \frametitle{Example: The Galerkin Scheme}
+  Suppose we want to solve
+  $$\pd{u}{t} +\pdd{x} F[u] = 0$$
+  where $F$ is an arbitrary (\textit{nonlinear}) functional of $u$
+  using the ansatz:
+  $$u(t,x) \approx \tilde{u} = \sum_{i=1}^N u_i(t) \phi_i(x)\ N\in\N$$
+  and
+  $$F[u] \approx \tilde{F} = \sum_{i=1}^N F_i[u] \phi_i(x)$$
+\end{frame}
+
+\begin{frame}
   \frametitle{Exercise}
   \begin{itemize}
   \item Solve the equation
-    $$\pd{u}{t} + c \pd{u}{x} = 0\text{ with }u(0,x)=\sin\left(e^{-(x-\pi)^2}\right)\text{ for }x\in[0,2\pi]$$
+    $$\pd{u}{t} + c \pd{u}{x} = 0\text{ with }u(0,x)=\sin\left(e^{-(x-\pi)^2}\right)\text{ for }x\in[-\pi,\pi]$$
     with periodic boundary conditions.
   \item Use a Fourier ansatz:
-    $$u(t,x) = \sum_{k=0}^N \left[a_k(t) \cos(kx) + b_k(t) \sin(kx)\right]\text{ for some }N\in\N$$
+    $$u(t,x) = a_0 + \sum_{k=1}^N \left[a_k(t) \cos(kx) + b_k(t) \sin(kx)\right]\text{ for some }N\in\N$$
+    \item Assume the following inner product:
+      $$\braket{a,b} = \frac{1}{\pi}\int_{-\pi}^{\pi}a(x) b(x) dx$$
   \end{itemize}
 \end{frame}
 
@@ -470,7 +506,6 @@
     \item \textit{Numerical Recipes}, by Press, Teukolsky, Vetterling, and Flannery
     \item \textit{Scientific Computing: An Introductory Survey}, by Heath
     \item \textit{Introduction to Spectral Methods}, by Grandclement (\href{http://arxiv.org/abs/gr-qc/0609020}{arXiv:gr-qc/0609020}).
-    \item \textit{Spectral Methods: Algorithms, Analysis, and Applications}, by Shen, Tang, and Wang
     \item \textit{Spectral Methods in MATLAB}, by Trefethen
   \end{itemize}
 \end{frame}
